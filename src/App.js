@@ -17,6 +17,7 @@ class App extends Component {
         this.onClickReset = this.onClickReset.bind(this);
         this.onClickStop = this.onClickStop.bind(this);
         this.onClickStart = this.onClickStart.bind(this);
+
     }
 
     onClickStart(){
@@ -55,14 +56,26 @@ class App extends Component {
 
     onClickReset(){
         //reset count down to the original time
+        const self= this;
         this.setState({
-            elapsed:1500
+            timer:{
+                elapsed:1500
+            },
+            interval: clearInterval(self.state.interval)
+        })
+    }
+    setTimer({timer}){
+
+        this.setState({
+            timer:{
+                start:timer * 60,
+                elapsed:timer * 60
+            }
         })
     }
 
   render() {
 
-        console.log("Elapsed is: ", this.state.timer.elapsed)
     return (
       <div className="App">
         <header className="App-header">
@@ -70,6 +83,23 @@ class App extends Component {
 
         </header>
         <div className="container">
+            <div className='tool-bar'>
+                <button
+                    className='filter'
+                    onClick={this.setTimer.bind(this, {timer:25})}>
+                    POMODORO
+                </button>
+                <button
+                    className='filter'
+                    onClick={this.setTimer.bind(this, {timer:5})}>
+                    SHORT BREAK
+                </button>
+                <button
+                    className='filter'
+                    onClick={this.setTimer.bind(this, {timer:25})}>
+                    LONG BREAK
+                </button>
+            </div>
             <div className='display'>
                 {this.state.timer.elapsed}
             </div>

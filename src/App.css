@@ -64,6 +64,9 @@ align-content: center;
   border-radius:2px;
   box-shadow: black;
 }
+.button:hover{
+  cursor:pointer;
+}
 
 .btn-start{
  background-color: green;
@@ -78,12 +81,36 @@ align-content: center;
 }
 .btn-stop:hover{
   background-color: darkred;
-}
 
+}
 .btn-reset{
   background-color: antiquewhite;
   color:gray;
+
 }
 .btn-reset:hover{
   background-color: aquamarine;
+}
+
+.filter{
+  border:none;
+  padding:10px;
+  background-color: greenyellow;
+  color: red;
+  font-size: 18px;
+  text-align: center;
+  display: inline-block;
+  flex: 1;
+  margin-left: 10px;
+}
+.filter:hover{
+  cursor:pointer;
+  font-weight: bold;
+}
+
+.tool-box{
+  display:flex;
+  max-width: 320px;
+  width:100%;
+
 }
