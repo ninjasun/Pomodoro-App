@@ -31,12 +31,14 @@ align-content: center;
 .display{
   font-size: 40px;
   font-weight: bold;
-  height:200px;
-  padding-top:40px;
-  padding-bottom:40px;
+  height:60px;
+  padding:20px;
   margin:auto;
+  margin-top:40px;
+  margin-bottom: 80px;
   width:120px;
   text-align: center;
+  background-color: darkgrey;
 }
 
 .button-bar{
@@ -45,6 +47,7 @@ align-content: center;
   width:300px;
   text-align: center;
   display:flex;
+
 }
 
 .button{
@@ -56,6 +59,10 @@ align-content: center;
   text-align: center;
   color:white;
   font-size: 16px;
+  border:none;
+  font-weight: bold;
+  border-radius:2px;
+  box-shadow: black;
 }
 
 .btn-start{
