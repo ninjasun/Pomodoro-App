@@ -26,3 +26,56 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+.container{
+  width: 100%;
+align-content: center;
+}
+
+.display{
+  font-size: 26px;
+  margin:auto;
+  width:120px;
+  text-align: center;
+}
+
+.button-bar{
+  font-size: 26px;
+  margin:auto;
+  width:300px;
+  text-align: center;
+  display:flex;
+}
+
+.button{
+  width:100px;
+  flex:1;
+  padding:10px;
+  margin:5px;
+  display: inline-block;
+  text-align: center;
+  color:white;
+  font-size: 16px;
+}
+
+.btn-start{
+ background-color: green;
+}
+
+.btn-start:hover{
+  background-color: greenyellow;
+}
+
+.btn-stop {
+  background-color: red;
+}
+.btn-stop:hover{
+  background-color: darkred;
+}
+
+.btn-reset{
+  background-color: antiquewhite;
+  color:gray;
+}
+.btn-reset:hover{
+  background-color: aquamarine;
+}
