@@ -44,11 +44,11 @@ class App extends Component {
 
         var countDown = function(){
 
-           const { end, elapsed } = self.state.timer;
-            //console.log("End is: ", end);
-            console.log("Elapsed is: ", elapsed)
+           const {  elapsed } = self.state.timer;
 
-           if (0 === elapsed){
+          const end = 0;
+
+           if (end === elapsed){
                //play sound and stop counter
                console.log('Countdown is finished! ',elapsed )
                self.setState({
@@ -118,6 +118,7 @@ class App extends Component {
     }
     handleSongFinishedPlaying(){
         const self = this;
+        console.log("this is: ", this)
         self.setState({
             playStatus : Sound.status.STOPPED
         })
@@ -135,7 +136,7 @@ class App extends Component {
                 url={sound}
                 playStatus={this.state.playStatus}
 
-                onFinishedPlaying={this.handleSongFinishedPlaying}
+                onFinishedPlaying={this.handleSongFinishedPlaying.bind(this)}
             />
         </header>
         <div className="container">
