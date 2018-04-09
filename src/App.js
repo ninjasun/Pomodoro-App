@@ -116,6 +116,8 @@ class App extends Component {
     getTimeElapsed(elapsed){
         let min = parseInt(elapsed / 60); //total minutes
         let second = Math.round((elapsed / 60 - min) * 60);
+        min = min > 9 ? min : '0'+ min;
+        second = second > 9 ? second : '0'+second;
         return min + ":" + second
     }
     handleSongFinishedPlaying(){
@@ -272,7 +274,7 @@ class App extends Component {
                 </button>
                 <button
                     className='filter'
-                    onClick={this.setTimer.bind(this, {timer:1})}>
+                    onClick={this.setTimer.bind(this, {timer:5})}>
                     SHORT BREAK
                 </button>
                 <button
