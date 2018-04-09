@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import logo from './pomodoro-technique.svg';
 import './App.css';
 
+import Sound from 'react-sound';
 
 
-
-//allow react dev tools work
-window.React = React;
+import sound from './alarmclock.mp3';
 
 
 class App extends Component {
@@ -14,6 +13,7 @@ class App extends Component {
         super(props);
         this.state = {
             interval:'',
+            playStatus:Sound.status.STOPPED,
             timer:{
                 start:1500,
                 end:0,
@@ -32,6 +32,10 @@ class App extends Component {
         console.log("play sound");
         return;
     }
+    riseNotification(){
+        console.log("notification up");
+        return
+    }
     onClickStart(){
         //start count down
         if (this.state.timer.isRunning) return;
@@ -39,12 +43,18 @@ class App extends Component {
         let self = this;
 
         var countDown = function(){
+
            const { end, elapsed } = self.state.timer;
+            //console.log("End is: ", end);
+            console.log("Elapsed is: ", elapsed)
 
-
-           if (end === elapsed){
+           if (0 === elapsed){
                //play sound and stop counter
-               self.playSound();
+               console.log('Countdown is finished! ',elapsed )
+               self.setState({
+                   playStatus : Sound.status.PLAYING
+               });
+               self.riseNotification();
                self.onClickReset();
                return;
            }
@@ -73,7 +83,8 @@ class App extends Component {
         if (!this.state.timer.isRunning) return;
         const self= this;
         this.setState({
-            interval: clearInterval(self.state.interval)
+            interval: clearInterval(self.state.interval),
+            isRunning:false
         })
     }
 
@@ -83,7 +94,8 @@ class App extends Component {
         const self= this;
         this.setState({
             timer:{
-                elapsed:1500
+                elapsed:1500,
+                isRunning:false
             },
             interval: clearInterval(self.state.interval)
         })
@@ -104,7 +116,12 @@ class App extends Component {
         let second = Math.round((elapsed / 60 - min) * 60);
         return min + ":" + second
     }
-
+    handleSongFinishedPlaying(){
+        const self = this;
+        self.setState({
+            playStatus : Sound.status.STOPPED
+        })
+    }
   render() {
 
     const { elapsed } = this.state.timer;
@@ -114,7 +131,12 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
+            <Sound
+                url={sound}
+                playStatus={this.state.playStatus}
 
+                onFinishedPlaying={this.handleSongFinishedPlaying}
+            />
         </header>
         <div className="container">
             <div className='tool-bar'>
@@ -125,7 +147,7 @@ class App extends Component {
                 </button>
                 <button
                     className='filter'
-                    onClick={this.setTimer.bind(this, {timer:5})}>
+                    onClick={this.setTimer.bind(this, {timer:1})}>
                     SHORT BREAK
                 </button>
                 <button
