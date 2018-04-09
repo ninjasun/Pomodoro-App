@@ -4,15 +4,21 @@ import './App.css';
 
 import Sound from 'react-sound';
 
+import Notification from 'react-web-notification';
 
 import sound from './alarmclock.mp3';
 
+//allow react dev tools work
+window.React = React;
 
 class App extends Component {
     constructor(props){
         super(props);
         this.state = {
             interval:'',
+            ignore:true,
+            title:'',
+            options:{},
             playStatus:Sound.status.STOPPED,
             timer:{
                 start:1500,
@@ -25,17 +31,11 @@ class App extends Component {
         this.onClickReset = this.onClickReset.bind(this);
         this.onClickStop = this.onClickStop.bind(this);
         this.onClickStart = this.onClickStart.bind(this);
-        this.playSound = this.playSound.bind(this);
+
 
     }
-    playSound(){
-        console.log("play sound");
-        return;
-    }
-    riseNotification(){
-        console.log("notification up");
-        return
-    }
+
+
     onClickStart(){
         //start count down
         if (this.state.timer.isRunning) return;
@@ -53,8 +53,10 @@ class App extends Component {
                console.log('Countdown is finished! ',elapsed )
                self.setState({
                    playStatus : Sound.status.PLAYING
+
                });
-               self.riseNotification();
+
+               self.handleButtonClick();
                self.onClickReset();
                return;
            }
@@ -118,11 +120,119 @@ class App extends Component {
     }
     handleSongFinishedPlaying(){
         const self = this;
-        console.log("this is: ", this)
+
         self.setState({
             playStatus : Sound.status.STOPPED
         })
     }
+
+    handleNotificationOnClick(e, tag){
+        console.log(e, 'Notification clicked tag:' + tag);
+    }
+
+    handleNotificationOnError(e, tag){
+        console.log(e, 'Notification error tag:' + tag);
+    }
+
+    handleNotificationOnClose(e, tag){
+        console.log(e, 'Notification closed tag:' + tag);
+    }
+
+    handleNotificationOnShow(e, tag){
+
+        console.log(e, 'Notification shown tag:' + tag);
+
+
+        if(this.state.ignore) {
+            return;
+        }
+
+        const now = Date.now();
+
+        const title = 'React-Web-Notification' + now;
+        const body = 'Hello' + new Date();
+        var tag = now;
+        const icon = 'http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png';
+        // const icon = 'http://localhost:3000/Notifications_button_24.png';
+
+        // Available options
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
+        const options = {
+            tag: tag,
+            body: body,
+            icon: icon,
+            lang: 'en',
+            dir: 'ltr'
+        }
+        this.setState({
+            title: title,
+            options: options
+        });
+    }
+
+
+    handlePermissionGranted(){
+        console.log('Permission Granted');
+        this.setState({
+            ignore: false
+        });
+    }
+    handlePermissionDenied(){
+        console.log('Permission Denied');
+        this.setState({
+            ignore: true
+        });
+    }
+    handleNotSupported(){
+        console.log('Web Notification not Supported');
+        this.setState({
+            ignore: true
+        });
+    }
+
+    handleNotificationOnClick(e, tag){
+        console.log(e, 'Notification clicked tag:' + tag);
+    }
+
+    handleNotificationOnError(e, tag){
+        console.log(e, 'Notification error tag:' + tag);
+    }
+
+    handleNotificationOnClose(e, tag){
+        console.log(e, 'Notification closed tag:' + tag);
+    }
+
+    handleNotificationOnShow(e, tag){
+
+        console.log(e, 'Notification shown tag:' + tag);
+    }
+    handleButtonClick() {
+
+        const now = Date.now();
+
+
+        const body = 'Hello' + new Date();
+        const tag = now;
+        const icon = 'http://georgeosddev.github.io/react-web-notification/example/Notifications_button_24.png';
+        // const icon = 'http://localhost:3000/Notifications_button_24.png';
+
+        // Available options
+        // See https://developer.mozilla.org/en-US/docs/Web/API/Notification/Notification
+        const options = {
+            tag: tag,
+            body: body,
+            icon: icon,
+            lang: 'en',
+            dir: 'ltr'
+        }
+        this.setState({
+            options: options,
+            title:'Pomodoro timer'
+        });
+    }
+
+
+
   render() {
 
     const { elapsed } = this.state.timer;
@@ -137,6 +247,20 @@ class App extends Component {
                 playStatus={this.state.playStatus}
 
                 onFinishedPlaying={this.handleSongFinishedPlaying.bind(this)}
+            />
+
+            <Notification
+                ignore={this.state.ignore && this.state.title !== ''}
+                notSupported={this.handleNotSupported.bind(this)}
+                onPermissionGranted={this.handlePermissionGranted.bind(this)}
+                onPermissionDenied={this.handlePermissionDenied.bind(this)}
+                onShow={this.handleNotificationOnShow.bind(this)}
+                onClick={this.handleNotificationOnClick.bind(this)}
+                onClose={this.handleNotificationOnClose.bind(this)}
+                onError={this.handleNotificationOnError.bind(this)}
+                timeout={5000}
+                title={this.state.title}
+                options={this.state.options}
             />
         </header>
         <div className="container">
