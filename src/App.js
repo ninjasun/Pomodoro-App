@@ -2,6 +2,13 @@ import React, { Component } from 'react';
 import logo from './pomodoro-technique.svg';
 import './App.css';
 
+
+
+
+//allow react dev tools work
+window.React = React;
+
+
 class App extends Component {
     constructor(props){
         super(props);
@@ -10,28 +17,43 @@ class App extends Component {
             timer:{
                 start:1500,
                 end:0,
-                elapsed:1500
+                elapsed:1500,
+                isRunning:false
             }
         };
 
         this.onClickReset = this.onClickReset.bind(this);
         this.onClickStop = this.onClickStop.bind(this);
         this.onClickStart = this.onClickStart.bind(this);
+        this.playSound = this.playSound.bind(this);
 
     }
-
+    playSound(){
+        console.log("play sound");
+        return;
+    }
     onClickStart(){
         //start count down
+        if (this.state.timer.isRunning) return;
+
         let self = this;
-        console.log("this is: ", this);
 
         var countDown = function(){
-            console.log("Elapsed is: ", self.state.timer.elapsed);
+           const { end, elapsed } = self.state.timer;
+
+
+           if (end === elapsed){
+               //play sound and stop counter
+               self.playSound();
+               self.onClickReset();
+               return;
+           }
             let newElapsed = self.state.timer.elapsed -1;
 
             self.setState({
                 timer:{
-                    elapsed:newElapsed
+                    elapsed:newElapsed,
+                    isRunning:true
                 }
             });
         };
@@ -48,6 +70,7 @@ class App extends Component {
     }
     onClickStop(){
         //stop count down
+        if (!this.state.timer.isRunning) return;
         const self= this;
         this.setState({
             interval: clearInterval(self.state.interval)
@@ -56,6 +79,7 @@ class App extends Component {
 
     onClickReset(){
         //reset count down to the original time
+        if (!this.state.timer.isRunning) return;
         const self= this;
         this.setState({
             timer:{
@@ -65,7 +89,9 @@ class App extends Component {
         })
     }
     setTimer({timer}){
-
+        if (this.state.timer.isRunning) {
+            this.onClickStop();
+        }
         this.setState({
             timer:{
                 start:timer * 60,
@@ -73,8 +99,16 @@ class App extends Component {
             }
         })
     }
+    getTimeElapsed(elapsed){
+        let min = parseInt(elapsed / 60); //total minutes
+        let second = Math.round((elapsed / 60 - min) * 60);
+        return min + ":" + second
+    }
 
   render() {
+
+    const { elapsed } = this.state.timer;
+    const timeElapsed = this.getTimeElapsed(elapsed);
 
     return (
       <div className="App">
@@ -101,7 +135,8 @@ class App extends Component {
                 </button>
             </div>
             <div className='display'>
-                {this.state.timer.elapsed}
+                {timeElapsed}
+
             </div>
             <div className='button-bar'>
                 <button
